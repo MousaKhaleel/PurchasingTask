@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PurchasingTask.Interfaces;
 
 namespace PurchasingTask.Controllers
 {
@@ -6,12 +7,22 @@ namespace PurchasingTask.Controllers
 	[Route("[controller]")]
 	public class OrderController : ControllerBase
 	{
-		//public IActionResult Index()
-		//{
-		//	return View();
-		//}
+		private readonly IOrderRepository _orderRepository;
+
+		public OrderController(IOrderRepository orderRepository)
+		{
+			_orderRepository = orderRepository;
+		}
 
 		//Place order
+		[HttpGet(Name = "PlaceOrder")]
+		public async Task<IActionResult> PlaceOrder()
+		{
+			var allOrder = await _orderRepository.GetAllAsync();
+			//TODO: implement
+
+			return Ok();
+		}
 		//[HttpPost(Name = "PlaceOrder")]
 
 		//Add/Remove Items from order

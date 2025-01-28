@@ -9,10 +9,6 @@ namespace PurchasingTask.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int ItemId { get; set; }
 
-		[ForeignKey(nameof(OrderId))]
-		public int OrderId { get; set; }
-		public Order Order { get; set; }
-
 		[Required]
 		[MaxLength(10)]
 		public string ItemCode { get; set; }
@@ -20,6 +16,7 @@ namespace PurchasingTask.Models
 		[Required]
 		[MaxLength(50)]
 		public string ItemName { get; set; }
+
 		[Required]
 		[MaxLength(50)]
 		public string Unit { get; set; }
@@ -27,9 +24,11 @@ namespace PurchasingTask.Models
 		[Required]
 		[Column(TypeName = "decimal(18,2)")]
 		public decimal Quantity { get; set; }
+
 		[Required]
 		[Column(TypeName = "decimal(18,4)")]
 		public decimal Price { get; set; }
+
 		[Required]
 		[Column(TypeName = "decimal(18,4)")]
 		public decimal CostAmount { get; set; }

@@ -16,6 +16,12 @@ namespace PurchasingTask.Data
 		{
 			modelBuilder.Entity<OrderItem>()
 						.HasKey(k => new { k.OrderId, k.ItemId });
+
+			modelBuilder.Entity<OrderItem>()
+						.HasOne(x => x.Item)
+						.WithMany(y => y.OrderItems)
+						.HasForeignKey(z => z.ItemId)
+						.OnDelete(DeleteBehavior.Restrict);
 		}
 	}
 }
