@@ -1,0 +1,6 @@
+@PurchasingTask_HostAddress = http://localhost:5175
+
+GET {{PurchasingTask_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
