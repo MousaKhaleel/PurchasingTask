@@ -56,7 +56,7 @@ namespace PurchasingTask.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("PurchasingTask.Models.Order", b =>

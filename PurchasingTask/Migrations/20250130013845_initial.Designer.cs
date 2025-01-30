@@ -12,7 +12,7 @@ using PurchasingTask.Data;
 namespace PurchasingTask.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250128215427_initial")]
+    [Migration("20250130013845_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -59,7 +59,7 @@ namespace PurchasingTask.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("PurchasingTask.Models.Order", b =>

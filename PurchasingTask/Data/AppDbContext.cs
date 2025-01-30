@@ -7,6 +7,7 @@ namespace PurchasingTask.Data
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+		public DbSet<Item> Items { get; set; }
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<OrderItem> OrderItems { get; set; }
 		public DbSet<Vendor> Vendors { get; set; }
