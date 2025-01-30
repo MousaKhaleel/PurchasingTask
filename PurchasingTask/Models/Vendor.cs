@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace PurchasingTask.Models
 {
-	public class Vendor
+	public class Vendor : IdentityUser
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int VendorId { get; set; }
+		//[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		//public int VendorId { get; set; }
 
 		[Required]
 		[MaxLength(60)]

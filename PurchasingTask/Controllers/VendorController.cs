@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using PurchasingTask.Dtos;
@@ -12,29 +13,37 @@ namespace PurchasingTask.Controllers
 	public class VendorController : ControllerBase
 	{
 		private readonly IVendorRepository _vendorRepository;
+		private readonly SignInManager<Vendor> _signInManager;
+		private readonly UserManager<Vendor> _userManager;
 
-		public VendorController(IVendorRepository vendorRepository)
+		public VendorController(IVendorRepository vendorRepository, SignInManager<Vendor> signInManager, UserManager<Vendor> userManager)
 		{
 			_vendorRepository = vendorRepository;
+			signInManager = _signInManager;
+			userManager = _userManager;
 		}
 		//TODO: vendor register and login
 		[HttpPost("register")]
-		public async Task<IActionResult> Register(Vendor vendor)
+		public async Task<IActionResult> Register(VendorRegisterDto vendorRegisterDto)
 		{
-			_vendorRepository.AddAsync(vendor);
+			Vendor vendor = new()
+			{
+				UserName = vendorRegisterDto.UserName,
+				VendorName = vendorRegisterDto.VendorName,
+				Email = vendorRegisterDto.Email,
+				PhoneNumber = vendorRegisterDto.VendorAddress,
+				PaymentMethodId
+			};
+			var result = await _userManager.CreateAsync(vendor, vendorRegisterDto.Password);
 			_vendorRepository.SaveChangesAsync();
 
 			return Ok("registerd sucssesfuly");
 		}
 		[HttpPost("login")]
-		public async Task<IActionResult> Login()
+		public async Task<IActionResult> Login(VendorLoginDto vendorLoginDto)
 		{
-			var vendor = await _vendorRepository.GetByEmail(.Email);
-			if (vendor.Password != .Password) {
-				return BadRequest("Invalid creditntials");
-			}
-			else
-				return Ok("Login successful.");
+			var result = await _signInManager.PasswordSignInAsync(vendorLoginDto.UserName, vendorLoginDto.Password, false, false);
+				return Ok("Login successful");
 		}
 		//TODO: Update Vendor Information such as payment method or vendor address.
 

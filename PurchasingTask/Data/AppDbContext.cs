@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PurchasingTask.Models;
 
 namespace PurchasingTask.Data
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext<Vendor>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -15,6 +16,8 @@ namespace PurchasingTask.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+
 			modelBuilder.Entity<OrderItem>()
 						.HasKey(k => new { k.OrderId, k.ItemId });
 
@@ -23,6 +26,18 @@ namespace PurchasingTask.Data
 						.WithMany(y => y.OrderItems)
 						.HasForeignKey(z => z.ItemId)
 						.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Vendor>().ToTable("Vendor");
+
+			modelBuilder.Entity<Vendor>().Ignore(v => v.EmailConfirmed);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.SecurityStamp);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.ConcurrencyStamp);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.PhoneNumber);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.PhoneNumberConfirmed);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.TwoFactorEnabled);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.LockoutEnd);
+			modelBuilder.Entity<Vendor>().Ignore(v => v.LockoutEnabled);
+
 		}
 	}
 }
