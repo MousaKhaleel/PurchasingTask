@@ -10,7 +10,7 @@ namespace PurchasingTask.Models
 		public int OrderId { get; set; }
 
 		[ForeignKey(nameof(VendorId))]
-		public int VendorId { get; set; }
+		public string VendorId { get; set; }
 		public Vendor Vendor { get; set; }
 
 		[Required]

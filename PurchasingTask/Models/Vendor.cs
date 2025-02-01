@@ -8,7 +8,7 @@ namespace PurchasingTask.Models
 	{
 		//[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		//public int VendorId { get; set; }
-
+		//used the identiy id
 		[Required]
 		[MaxLength(60)]
 		public string VendorName { get; set; }

@@ -10,10 +10,10 @@ namespace PurchasingTask.Dtos
 
 		public string VendorName { get; set; }
 		public string Email { get; set; }
-		public string? Password { get; set; }
+		public string Password { get; set; }
 		public string VendorAddress { get; set; }
 
-		//public int PaymentMethodId { get; set; }
+		public int PaymentMethodId { get; set; }
 		//public PaymentMethod PaymentMethod { get; set; }
 	}
 }

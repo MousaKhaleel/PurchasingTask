@@ -27,7 +27,11 @@ namespace PurchasingTask.Data
 						.HasForeignKey(z => z.ItemId)
 						.OnDelete(DeleteBehavior.Restrict);
 
-			modelBuilder.Entity<Vendor>().ToTable("Vendor");
+			modelBuilder.Entity<Order>()
+						.Property(e => e.OrderDate)
+						.HasDefaultValueSql("GETDATE()");
+
+			modelBuilder.Entity<Vendor>().ToTable("Vendors");
 
 			modelBuilder.Entity<Vendor>().Ignore(v => v.EmailConfirmed);
 			modelBuilder.Entity<Vendor>().Ignore(v => v.SecurityStamp);

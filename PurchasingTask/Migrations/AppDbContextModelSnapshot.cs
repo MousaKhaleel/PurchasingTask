@@ -209,17 +209,17 @@ namespace PurchasingTask.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("VendorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VendorId1")
+                    b.Property<string>("VendorId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("VendorId1");
+                    b.HasIndex("VendorId");
 
                     b.ToTable("Orders");
                 });
@@ -310,7 +310,7 @@ namespace PurchasingTask.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Vendor", (string)null);
+                    b.ToTable("Vendors", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -368,7 +368,9 @@ namespace PurchasingTask.Migrations
                 {
                     b.HasOne("PurchasingTask.Models.Vendor", "Vendor")
                         .WithMany("Orders")
-                        .HasForeignKey("VendorId1");
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Vendor");
                 });

@@ -15,6 +15,11 @@ namespace PurchasingTask.Repositories
 			_context = context;
 		}
 
+		public async Task<IEnumerable<PaymentMethod>> GetAllPaymentMethodsAsync()
+		{
+			return await _context.PaymentMethods.ToListAsync();
+		}
+
 		public Task GetByEmail(string email)
 		{
 			var vendor= _context.Vendors.Where(x=>x.Email==email).FirstOrDefaultAsync();
@@ -23,12 +28,11 @@ namespace PurchasingTask.Repositories
 
 		public async Task UpdateAsync(Vendor vendor)
 		{
-			throw new NotImplementedException();
-		}
-
-		public async Task UpdateAsync(VendorDto vendorDto)
-		{
-			throw new NotImplementedException();
+			var findVendor = await _context.Vendors.FindAsync(vendor.Id);
+			findVendor.VendorAddress = vendor.VendorAddress;
+			findVendor.PaymentMethod.PaymentMethodId = vendor.PaymentMethodId;
+			findVendor.PaymentMethod.PaymentMethodName = vendor.PaymentMethod.PaymentMethodName;
+			_context.Vendors.Update(findVendor);
 		}
 	}
 }

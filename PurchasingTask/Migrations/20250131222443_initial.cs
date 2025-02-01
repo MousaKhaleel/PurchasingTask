@@ -78,7 +78,7 @@ namespace PurchasingTask.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vendor",
+                name: "Vendors",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -94,9 +94,9 @@ namespace PurchasingTask.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vendor", x => x.Id);
+                    table.PrimaryKey("PK_Vendors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vendor_PaymentMethods_PaymentMethodId",
+                        name: "FK_Vendors_PaymentMethods_PaymentMethodId",
                         column: x => x.PaymentMethodId,
                         principalTable: "PaymentMethods",
                         principalColumn: "PaymentMethodId",
@@ -117,9 +117,9 @@ namespace PurchasingTask.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_Vendor_UserId",
+                        name: "FK_AspNetUserClaims_Vendors_UserId",
                         column: x => x.UserId,
-                        principalTable: "Vendor",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -137,9 +137,9 @@ namespace PurchasingTask.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_Vendor_UserId",
+                        name: "FK_AspNetUserLogins_Vendors_UserId",
                         column: x => x.UserId,
-                        principalTable: "Vendor",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -161,9 +161,9 @@ namespace PurchasingTask.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_Vendor_UserId",
+                        name: "FK_AspNetUserRoles_Vendors_UserId",
                         column: x => x.UserId,
-                        principalTable: "Vendor",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -181,9 +181,9 @@ namespace PurchasingTask.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_Vendor_UserId",
+                        name: "FK_AspNetUserTokens_Vendors_UserId",
                         column: x => x.UserId,
-                        principalTable: "Vendor",
+                        principalTable: "Vendors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -194,9 +194,8 @@ namespace PurchasingTask.Migrations
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VendorId = table.Column<int>(type: "int", nullable: false),
-                    VendorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VendorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
@@ -204,10 +203,11 @@ namespace PurchasingTask.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Orders_Vendor_VendorId1",
-                        column: x => x.VendorId1,
-                        principalTable: "Vendor",
-                        principalColumn: "Id");
+                        name: "FK_Orders_Vendors_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,23 +267,23 @@ namespace PurchasingTask.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_VendorId1",
+                name: "IX_Orders_VendorId",
                 table: "Orders",
-                column: "VendorId1");
+                column: "VendorId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "Vendor",
+                table: "Vendors",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vendor_PaymentMethodId",
-                table: "Vendor",
+                name: "IX_Vendors_PaymentMethodId",
+                table: "Vendors",
                 column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "Vendor",
+                table: "Vendors",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
@@ -320,7 +320,7 @@ namespace PurchasingTask.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Vendor");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PurchasingTask.Dtos;
 using PurchasingTask.Interfaces;
 using PurchasingTask.Models;
@@ -16,13 +17,20 @@ namespace PurchasingTask.Controllers
 			_itemRepository = itemRepository;
 		}
 
+		[HttpGet("GetAllItems")]
+		public async Task<IActionResult> GetAllItems()
+		{
+			var allAvaliable = await _itemRepository.GetAllInStockAsync();
+			return Ok(allAvaliable);
+		}
+
 		//TODO: add item
-		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		[HttpPost("AddItem")]
 		public async Task<IActionResult> AddItem(ItemDto itemDto)
 		{
 			var item = new Item()
 			{
-				ItemId = itemDto.ItemId,
 				ItemCode = itemDto.ItemCode,
 				ItemName = itemDto.ItemName,
 				Unit = itemDto.Unit,
@@ -30,8 +38,8 @@ namespace PurchasingTask.Controllers
 				Price = itemDto.Price,
 				CostAmount = itemDto.CostAmount,
 			};
-			_itemRepository.AddAsync(item);
-			_itemRepository.SaveChangesAsync();
+			await _itemRepository.AddAsync(item);
+			await _itemRepository.SaveChangesAsync();
 			return Ok(item);
 		}
 	}

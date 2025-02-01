@@ -13,8 +13,6 @@ namespace PurchasingTask.Interfaces
 		Task<T> GetByIdAsync(object id);
 
 		Task AddAsync(T entity);
-		Task UpdateAsync(T entity);
-		Task DeleteAsync(int id);
 		Task SaveChangesAsync();
 	}
 }

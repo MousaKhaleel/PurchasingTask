@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PurchasingTask.Dtos;
 using PurchasingTask.Interfaces;
+using PurchasingTask.Models;
 
 namespace PurchasingTask.Controllers
 {
@@ -12,50 +16,67 @@ namespace PurchasingTask.Controllers
 		private readonly IOrderRepository _orderRepository;
 		private readonly IItemRepository _ItemRepository;
 
-		public OrderController(IOrderRepository orderRepository, IItemRepository itemRepository)
+		private readonly UserManager<Vendor> _userManager;
+
+
+		public OrderController(IOrderRepository orderRepository, IItemRepository itemRepository, UserManager<Vendor> userManager)
 		{
 			_orderRepository = orderRepository;
 			_ItemRepository = itemRepository;
+			_userManager = userManager;
 		}
 
 		//TODO: Place order
-		[HttpGet(Name = "PlaceOrder")]
-		public async Task<IActionResult> PlaceOrder()
+		[HttpPost("PlaceOrder")]
+		public async Task<IActionResult> PlaceOrder(OrderDto orderDto)
 		{
-			var allItems = await _ItemRepository.GetAllInStockAsync();
-			//TODO: implement
-			var order = await _orderRepository.CreateOrderAsync(itemsToOrder);
-			_orderRepository.SaveChangesAsync();
-			return Ok(order);
+			await _orderRepository.CreateOrderAsync(orderDto);
+
+			await _orderRepository.SaveChangesAsync();
+			return Ok("Order made succsefully");
 		}
-		//[HttpPost(Name = "PlaceOrder")]
 
 		//TODO: Add/Remove Items from order
 
 		//TODO: Update Order items quantity &amp; price then calculate total cost amount.
+
+
 		[HttpPost("AddToOrder/{orderId}/{itemId}")]
 		public async Task<IActionResult> AddToOrder(int orderId, int itemId)
 		{
-			//TODO: implement
-			var order = await _orderRepository.GetByIdAsync(orderId);
+			try
+			{
+				var userId = _userManager.GetUserId(User);
 
-
-			_orderRepository.SaveChangesAsync();
-			return Ok();
+				await _orderRepository.AddToOrderAsync(userId, orderId, itemId);
+				await _orderRepository.SaveChangesAsync();
+				return Ok("added");
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				return Unauthorized(e.Message);
+			}
 		}
 		[HttpDelete("RemoveFromOrder/{orderId}/{itemId}")]
 		public async Task<IActionResult> RemoveFromOrder(int orderId, int itemId)
 		{
-			//TODO: implement
-			var order = await _orderRepository.GetByIdAsync(orderId);
-			var itemToRemove= _ItemRepository.GetByIdAsync(itemId);
+			try
+			{
+				var userId = _userManager.GetUserId(User);
 
-			_orderRepository.RemoveFromOrder(itemToRemove);
-			itemToRemove.quntte+=1
-			_ItemRepository.SaveChangesAsync();
-			_orderRepository.SaveChangesAsync();
-			return Ok();
+				await _orderRepository.RemoveFromOrderAsync(userId, orderId, itemId);
+
+				await _ItemRepository.SaveChangesAsync();
+				await _orderRepository.SaveChangesAsync();
+				return Ok("removed");
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				return Unauthorized(e.Message);
+			}
 		}
+
+
 
 	}
 }

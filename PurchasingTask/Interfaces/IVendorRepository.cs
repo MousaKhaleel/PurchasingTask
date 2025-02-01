@@ -5,7 +5,9 @@ namespace PurchasingTask.Interfaces
 {
 	public interface IVendorRepository : IGenericRepository<Vendor>
 	{
-		Task UpdateAsync(VendorDto vendorDto);
+		Task UpdateAsync(Vendor vendor);
 		Task GetByEmail(string email);
+
+		Task<IEnumerable<PaymentMethod>> GetAllPaymentMethodsAsync();
 	}
 }
